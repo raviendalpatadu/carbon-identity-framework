@@ -914,6 +914,9 @@
         <Resource context="(.*)/api/server/v1/configs/home-realm-identifiers" secured="true" http-method="GET">
             <Scopes>internal_login</Scopes>
         </Resource>
+        <Resource context="(.*)/api/server/v1/configs/preferences" secured="true" http-method="POST">
+            <Scopes>internal_login</Scopes>
+        </Resource>
         {% if configs.endpoint.elevate_permission is sameas false %}
         <Resource context="(.*)/api/server/v1/configs(.*)" secured="true" http-method="GET">
             <Scopes>internal_login</Scopes>
