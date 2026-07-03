@@ -220,6 +220,8 @@ public class Constants {
         public static final String BUTTON = "BUTTON";
         public static final String INPUT = "INPUT";
         public static final String CAPTCHA = "CAPTCHA";
+        public static final String POLICY = "POLICY";
+        public static final String PREFERENCE = "PREFERENCE";
 
         private ComponentTypes() {
 
@@ -268,6 +270,21 @@ public class Constants {
         public static final String COMPATIBILITY_SETTING_GROUP = "flowExecution";
 
         private FlowConfigConstants() {
+
+        }
+    }
+
+    /**
+     * Constants for audit log data keys.
+     */
+    public static class AuditLogConstants {
+
+        public static final String FLOW_COMPLETION_CONFIGS = "flowCompletionConfigs";
+        public static final String EXECUTORS = "executors";
+        public static final String EXECUTOR = "executor";
+        public static final String METADATA = "metadata";
+
+        private AuditLogConstants() {
 
         }
     }

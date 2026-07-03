@@ -1595,6 +1595,89 @@
             <Read>
                 <Scope name="internal_flow_view"/>
                 <Scope name="internal_governance_view"/>
+                <Scope name="internal_consent_mgt_purpose_view"/>
+            </Read>
+        </Scopes>
+    </APIResourceCollection>
+    <APIResourceCollection name="flowExtensions" displayName="Flow Extensions" type="tenant">
+        <Scopes>
+            <Feature>
+                <Scope name="console:flowExtensions"/>
+                <Scope name="console:flowExtensions_view"/>
+                <Scope name="console:flowExtensions_edit"/>
+            </Feature>
+            <Update>
+                <Scope name="internal_flow_extension_update"/>
+            </Update>
+            <Delete>
+                <Scope name="internal_flow_extension_delete"/>
+            </Delete>
+            <Create>
+                <Scope name="internal_flow_extension_create"/>
+            </Create>
+            <Read>
+                <Scope name="internal_flow_extension_view"/>
+                <Scope name="internal_claim_meta_view"/>
+            </Read>
+        </Scopes>
+    </APIResourceCollection>
+    <APIResourceCollection name="consents" displayName="Consent Management" type="tenant">
+        <Scopes>
+            <Feature>
+                <Scope name="console:consents"/>
+                <Scope name="console:consents_view"/>
+                <Scope name="console:consents_edit"/>
+            </Feature>
+            <Update>
+                <Scope name="internal_consent_mgt_purpose_update"/>
+                <Scope name="internal_branding_preference_policy_update"/>
+            </Update>
+            <Delete>
+                <Scope name="internal_consent_mgt_element_delete"/>
+                <Scope name="internal_consent_mgt_purpose_delete"/>
+                <Scope name="internal_consent_mgt_purpose_app_delete"/>
+            </Delete>
+            <Create>
+                <Scope name="internal_consent_mgt_element_create"/>
+                <Scope name="internal_consent_mgt_purpose_create"/>
+                <Scope name="internal_consent_mgt_purpose_app_create"/>
+            </Create>
+            <Read>
+                <Scope name="internal_consent_mgt_element_view"/>
+                <Scope name="internal_consent_mgt_purpose_view"/>
+                <Scope name="internal_consent_mgt_purpose_app_view"/>
+                <Scope name="internal_claim_meta_view"/>
+                <Scope name="internal_application_mgt_view"/>
+            </Read>
+        </Scopes>
+    </APIResourceCollection>
+    <APIResourceCollection name="org_consents" displayName="Consent Management" type="organization">
+        <Scopes>
+            <Feature>
+                <Scope name="console:org:consents"/>
+                <Scope name="console:org:consents_view"/>
+                <Scope name="console:org:consents_edit"/>
+            </Feature>
+            <Update>
+                <Scope name="internal_org_consent_mgt_purpose_update"/>
+                <Scope name="internal_org_branding_preference_policy_update"/>
+            </Update>
+            <Delete>
+                <Scope name="internal_org_consent_mgt_element_delete"/>
+                <Scope name="internal_org_consent_mgt_purpose_delete"/>
+                <Scope name="internal_org_consent_mgt_purpose_app_delete"/>
+            </Delete>
+            <Create>
+                <Scope name="internal_org_consent_mgt_element_create"/>
+                <Scope name="internal_org_consent_mgt_purpose_create"/>
+                <Scope name="internal_org_consent_mgt_purpose_app_create"/>
+            </Create>
+            <Read>
+                <Scope name="internal_org_consent_mgt_element_view"/>
+                <Scope name="internal_org_consent_mgt_purpose_view"/>
+                <Scope name="internal_org_consent_mgt_purpose_app_view"/>
+                <Scope name="internal_org_claim_meta_view"/>
+                <Scope name="internal_org_application_mgt_view"/>
             </Read>
         </Scopes>
     </APIResourceCollection>
@@ -1611,6 +1694,7 @@
                 <Scope name="internal_user_credential_mgt_delete"/>
             </Delete>
             <Create>
+                <Scope name="internal_user_credential_mgt_create"/>
             </Create>
             <Read>
                 <Scope name="internal_user_credential_mgt_view"/>
@@ -2156,6 +2240,29 @@
             <Read>
                 <Scope name="internal_org_flow_view"/>
                 <Scope name="internal_org_governance_view"/>
+                <Scope name="internal_org_consent_mgt_purpose_view"/>
+            </Read>
+        </Scopes>
+    </APIResourceCollection>
+    <APIResourceCollection name="org_flowExtensions" displayName="Flow Extensions" type="organization">
+        <Scopes>
+            <Feature>
+                <Scope name="console:org:flowExtensions"/>
+                <Scope name="console:org:flowExtensions_view"/>
+                <Scope name="console:org:flowExtensions_edit"/>
+            </Feature>
+            <Update>
+                <Scope name="internal_org_flow_extension_update"/>
+            </Update>
+            <Delete>
+                <Scope name="internal_org_flow_extension_delete"/>
+            </Delete>
+            <Create>
+                <Scope name="internal_org_flow_extension_create"/>
+            </Create>
+            <Read>
+                <Scope name="internal_org_flow_extension_view"/>
+                <Scope name="internal_org_claim_meta_view"/>
             </Read>
         </Scopes>
     </APIResourceCollection>
@@ -2172,6 +2279,7 @@
                 <Scope name="internal_org_user_credential_mgt_delete"/>
             </Delete>
             <Create>
+                <Scope name="internal_org_user_credential_mgt_create"/>
             </Create>
             <Read>
                 <Scope name="internal_org_user_credential_mgt_view"/>

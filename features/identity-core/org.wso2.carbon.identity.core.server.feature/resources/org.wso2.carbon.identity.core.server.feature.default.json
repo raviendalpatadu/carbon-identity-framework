@@ -242,6 +242,7 @@
   "oauth.dcr.authentication_required": true,
   "oauth.dcr.mandate_ssa": false,
   "oauth.allow_default_requested_scopes_for_back_channel_grant": false,
+  "oauth.use_app_authorized_scopes_as_default": false,
   "oauth.enable_jwt_token_validation_during_introspection": true,
   "oauth.use_client_id_as_sub_claim_for_app_tokens": true,
   "oauth.remove_username_from_introspection_response_for_app_tokens": true,
@@ -321,6 +322,7 @@
   "oauth.oidc.enable_tls_certificate_bound_access_tokens_via_binding_type": true,
   "oauth.oidc.enable_hybrid_flow_app_level_validation": true,
   "oauth.oidc.enable_claims_separation_for_access_tokens": true,
+  "oauth.oidc.restrict_assertion_claims_to_configured_attributes": false,
 
   "oauth.oidc.fapi.enable_ciba_profile": false,
   "oauth.oidc.fapi.enable_security_profile": false,
@@ -358,6 +360,8 @@
   "oauth.listener.agent_application_creator.enable": true,
   "oauth.listener.agent_application_creator.class": "org.wso2.carbon.identity.oauth.listener.UserApplicationCreationListener",
   "oauth.listener.agent_application_creator.order": "99",
+  "oauth.graceful_refresh_token_rotation.maximum_validity_period": "60",
+  "oauth.graceful_refresh_token_rotation.maximum_reuse_limit": "5",
 
   "rest_api_authentication.add_realm_user_to_error": false,
 
@@ -728,12 +732,16 @@
   "event.default_listener.outbound_provisioning_error_handler.enable": true,
   "event.default_listener.fragment_app_mgt_listener.priority": "50",
   "event.default_listener.fragment_app_mgt_listener.enable": true,
+  "event.default_listener.sub_org_application_mgt_listener.priority": "375",
+  "event.default_listener.sub_org_application_mgt_listener.enable": true,
   "event.default_listener.organization_user_operation_listener.priority": "115",
   "event.default_listener.organization_user_operation_listener.enable": true,
   "event.default_listener.organization_discovery_user_operation_listener.priority": "114",
   "event.default_listener.organization_discovery_user_operation_listener.enable": true,
   "event.default_listener.organization_user_association_listener.priority": "128",
   "event.default_listener.organization_user_association_listener.enable": true,
+  "event.default_listener.organization_agent_association_listener.priority": "130",
+  "event.default_listener.organization_agent_association_listener.enable": true,
   "event.default_listener.shared_user_profile_update_governance_listener.priority": "8",
   "event.default_listener.shared_user_profile_update_governance_listener.enable": true,
 
@@ -911,7 +919,8 @@
     "/samlartresolve",
     "/passivests",
     "/longwaitstatus(.*)",
-    "/push-auth/(.*)"
+    "/push-auth/(.*)",
+    "/.well-known/openid-configuration(.*)"
   ],
   "tenant_context.rewrite.overwrite.dispatch": ["/myaccount/", "/console/"],
   "tenant_context.rewrite.overwrite.ignore_dispatch_path": [
@@ -1407,7 +1416,8 @@
     "swe-idp"
   ],
   "console.ui.hiddenApplicationTemplates": [
-    "microsoft-365"
+    "microsoft-365",
+    "agent-application"
   ],
   "console.ui.system_reserved_user_stores": ["AGENT"],
   "console.ui.google_one_tap_enabled_tenants": [],
@@ -1424,6 +1434,7 @@
   "console.ui.routes.organizationEnabledRoutes.attributeDialects": "v0.0.0",
   "console.ui.routes.organizationEnabledRoutes.attributeUpdateVerificationSettings": "v1.0.0",
   "console.ui.routes.organizationEnabledRoutes.branding": "v0.0.0",
+  "console.ui.routes.organizationEnabledRoutes.consents": "v0.0.0",
   "console.ui.routes.organizationEnabledRoutes.consoleSettings": "v0.0.0",
   "console.ui.routes.organizationEnabledRoutes.emailTemplates": "v0.0.0",
   "console.ui.routes.organizationEnabledRoutes.flows": "v1.0.0",
@@ -1432,6 +1443,8 @@
   "console.ui.routes.organizationEnabledRoutes.groups": "v0.0.0",
   "console.ui.routes.organizationEnabledRoutes.identityProviders": "v0.0.0",
   "console.ui.routes.organizationEnabledRoutes.loginAndRegistration": "v1.0.0",
+  "console.ui.routes.organizationEnabledRoutes.preferenceManagement": "v0.0.0",
+  "console.ui.routes.organizationEnabledRoutes.mcpServers": "v0.0.0",
   "console.ui.routes.organizationEnabledRoutes.oidcScopes": "v0.0.0",
   "console.ui.routes.organizationEnabledRoutes.organizations": "v0.0.0",
   "console.ui.routes.organizationEnabledRoutes.password-recovery": "v1.0.0",
@@ -1507,6 +1520,26 @@
   ],
   "console.agents.scopes.update": ["internal_agent_mgt_update"],
   "console.agents.scopes.delete": ["internal_agent_mgt_delete"],
+  "console.agents.sub_features.agentSharing.enabled": true,
+  "console.agents.sub_features.agentSharing.scopes.create": [
+    "internal_agent_share"
+  ],
+  "console.agents.sub_features.agentSharing.scopes.delete": [
+    "internal_agent_unshare"
+  ],
+  "console.agents.sub_features.agentSharing.scopes.read": [
+    "internal_agent_mgt_list",
+    "internal_agent_mgt_view",
+    "internal_agent_shared_access_view",
+    "internal_governance_view",
+    "internal_group_mgt_view",
+    "internal_organization_view",
+    "internal_role_mgt_view",
+    "internal_userstore_view"
+  ],
+  "console.agents.sub_features.agentSharing.scopes.update": [
+    "internal_agent_shared_access_update"
+  ],
   "console.webhooks.scopes.feature": ["console:webhooks"],
   "console.webhooks.scopes.create": ["internal_webhook_mgt_create"],
   "console.webhooks.scopes.read": [
@@ -1617,13 +1650,45 @@
   "console.branding.scopes.read": ["internal_application_mgt_view"],
   "console.branding.scopes.update": ["internal_branding_preference_update"],
   "console.branding.scopes.delete": ["internal_branding_preference_update"],
+  "console.consents.enabled": "$ref{consent_mgt.enable_v2_api}",
+  "console.consents.scopes.feature": ["console:consents"],
+  "console.consents.disabled_features": [],
+  "console.consents.scopes.create": [
+    "internal_consent_mgt_element_create",
+    "internal_consent_mgt_purpose_create"
+  ],
+  "console.consents.scopes.read": [
+    "internal_application_mgt_view",
+    "internal_claim_meta_view",
+    "internal_consent_mgt_element_view",
+    "internal_consent_mgt_purpose_app_view",
+    "internal_consent_mgt_purpose_view"
+  ],
+  "console.consents.scopes.update": [
+    "internal_branding_preference_policy_update",
+    "internal_consent_mgt_purpose_app_create",
+    "internal_consent_mgt_purpose_app_delete",
+    "internal_consent_mgt_purpose_update"
+  ],
+  "console.consents.scopes.delete": [
+    "internal_consent_mgt_element_delete",
+    "internal_consent_mgt_purpose_delete"
+  ],
   "console.flows.enabled": true,
   "console.flows.scopes.feature": ["console:flows"],
   "console.flows.disabled_features": [],
   "console.flows.scopes.create": [],
-  "console.flows.scopes.read": ["internal_flow_view", "internal_governance_view"],
+  "console.flows.scopes.read": ["internal_flow_view", "internal_governance_view", "internal_consent_mgt_purpose_view"],
   "console.flows.scopes.update": ["internal_flow_update", "internal_governance_update"],
   "console.flows.scopes.delete": [],
+  "console.flow_extensions.enabled": true,
+  "console.flow_extensions.feature_flags": [],
+  "console.flow_extensions.scopes.feature": ["console:flowExtensions"],
+  "console.flow_extensions.disabled_features": [],
+  "console.flow_extensions.scopes.create": ["internal_flow_extension_create"],
+  "console.flow_extensions.scopes.read": ["internal_flow_extension_view", "internal_claim_meta_view"],
+  "console.flow_extensions.scopes.update": ["internal_flow_extension_update"],
+  "console.flow_extensions.scopes.delete": ["internal_flow_extension_delete"],
   "console.certificates.enabled": true,
   "console.certificates.scopes.feature": ["console:certificates"],
   "console.certificates.scopes.create": ["internal_keystore_update"],
@@ -2103,6 +2168,8 @@
   "myaccount.approvals.enabled": true,
   "myaccount.approvals.scopes.read": ["internal_approval_task_view"],
   "myaccount.approvals.scopes.update": ["internal_approval_task_update"],
+  "myaccount.consents.enabled": "$ref{consent_mgt.enable_v2_api}",
+  "myaccount.consents.disabled_features": [],
   "myaccount.operations.scopes.create": [],
   "myaccount.operations.scopes.read": ["internal_humantask_view"],
   "myaccount.operations.scopes.update": [],
@@ -2228,6 +2295,8 @@
   "actions.types.pre_update_profile.enable": true,
   "actions.types.pre_update_profile.version.latest": "v1",
   "actions.types.pre_update_password.version.latest": "v2",
+  "actions.types.flow_extension.enable": true,
+  "actions.types.flow_extension.version.latest": "v1",
 
   "external_api_client.http_client.connection_timeout": "2000",
   "external_api_client.http_client.read_timeout": "3000",
@@ -2253,9 +2322,11 @@
 
   "webhooks.maximum_webhooks_per_tenant": "10",
   "webhooks.registration.skip_signup_confirmation_if_account_lock_disabled": true,
+  "webhooks.event_profiles.disabled_channels": [],
 
   "oauth.authorize_all_scopes": false,
   "oauth.authorize_internal_scopes": false,
+  "oauth.merge_authorized_scopes_by_policy": true,
   "oauth.enable_rich_authorization_requests" : true,
 
   "system_applications.system_portals": ["Console", "My Account"],
@@ -2287,7 +2358,9 @@
   "flow_execution.enable_legacy_password_recovery_flow": false,
   "flow_execution.enable_legacy_invited_user_registration_flow": false,
   "flow_execution.registration.display_claim_availability": false,
+  "consent_mgt.enable_v2_api": true,
   "branding_configuration.custom_content.max_file_size": "1048576",
+  "captcha.disable_for_console.login": false,
   "captcha.enable_captcha_for_local_otp_authenticators": true,
 
   "console.ui.organizations.organization_display_name.enable": true,
@@ -2318,5 +2391,26 @@
   "identity_mgt.inactive_account_suspension.revoke_grant_cache_upon_login": false,
   "enhanced_organization_authentication.enabled_by_default_for_new_apps": true,
   "saas.enable_app_creation": false,
-  "saas.enable_cross_tenant_operations": false
+  "saas.enable_cross_tenant_operations": false,
+
+  "analytics.moesif.provider_url": "https://api.moesif.net/v1",
+  "analytics.moesif.auth_type": "API_KEY",
+  "analytics.moesif.api_key_header": "X-Moesif-Application-Id",
+  "analytics.moesif.stream_name": "org.wso2.is.analytics.stream.MoesifData",
+  "analytics.moesif.stream_version": "1.0.0",
+  "analytics.moesif.inline_body": "",
+  "analytics.moesif.enabled": false,
+  "analytics.moesif.always_publish": false,
+
+  "circuit_breaker.enabled": true,
+  "circuit_breaker.tenant_service_cache_capacity": 5000,
+  "circuit_breaker.tenant_service_eviction_threshold": 0.75,
+  "circuit_breaker.tenant_service_entry_idle_timeout": 600000,
+  "circuit_breaker.window_size": 30,
+  "circuit_breaker.min_calls_to_evaluate": 15,
+  "circuit_breaker.failure_rate_threshold": 0.5,
+  "circuit_breaker.open_duration": 60000,
+  "circuit_breaker.max_in_flight": 20,
+
+  "saas_apps.return_roles_in_id_token": false
 }

@@ -18,16 +18,19 @@
 
 package org.wso2.carbon.identity.external.api.client.internal.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -78,8 +81,13 @@ public class APIClient {
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(apiClientConfig.getPoolSizeToBeSet());
         connectionManager.setDefaultMaxPerRoute(apiClientConfig.getMaxPerRoute());
-        httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).setConnectionManager(connectionManager)
-                .build();
+        HttpClientBuilder clientBuilder = HttpClientBuilder.create()
+                .setDefaultRequestConfig(config)
+                .setConnectionManager(connectionManager);
+        if (StringUtils.isNotBlank(apiClientConfig.getProxyHost())) {
+            clientBuilder.setProxy(new HttpHost(apiClientConfig.getProxyHost(), apiClientConfig.getProxyPort()));
+        }
+        httpClient = clientBuilder.build();
         defaultResponseLimitInBytes = apiClientConfig.getResponseLimitInBytes();
 
         if (LOG.isDebugEnabled()) {
@@ -125,6 +133,12 @@ public class APIClient {
                         new HttpPost(requestContext.getEndpointUrl());
                 httpEntityEnclosingRequestBase.setEntity(requestContext.getPayload());
                 httpRequestBase = httpEntityEnclosingRequestBase;
+                break;
+            case PUT:
+                HttpEntityEnclosingRequestBase httpPutRequestBase =
+                        new HttpPut(requestContext.getEndpointUrl());
+                httpPutRequestBase.setEntity(requestContext.getPayload());
+                httpRequestBase = httpPutRequestBase;
                 break;
             case GET:
                 httpRequestBase = new HttpGet(requestContext.getEndpointUrl());
@@ -237,5 +251,15 @@ public class APIClient {
         }
 
         return new APIResponse(statusCode, responseBody);
+    }
+
+    /**
+     * Closes the underlying HTTP client and releases all associated resources.
+     *
+     * @throws IOException if an error occurs while closing the HTTP client.
+     */
+    public void close() throws IOException {
+
+        httpClient.close();
     }
 }

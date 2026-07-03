@@ -214,6 +214,7 @@ import static org.wso2.carbon.identity.application.authentication.framework.util
 import static org.wso2.carbon.identity.application.authentication.framework.util.FrameworkConstants.Config.AUTHENTICATION_CONTEXT_EXPIRY_VALIDATION;
 import static org.wso2.carbon.identity.application.authentication.framework.util.FrameworkConstants.Config.SKIP_LOCAL_USER_SEARCH_FOR_AUTHENTICATION_FLOW_HANDLERS;
 import static org.wso2.carbon.identity.application.authentication.framework.util.FrameworkConstants.Config.USER_SESSION_MAPPING_ENABLED;
+import static org.wso2.carbon.identity.application.authentication.framework.util.FrameworkConstants.Consent.ENABLE_V2_API_PROPERTY;
 import static org.wso2.carbon.identity.application.authentication.framework.util.FrameworkConstants.ENABLE_CONFIGURED_IDP_SUB_FOR_FEDERATED_USER_ASSOCIATION;
 import static org.wso2.carbon.identity.application.authentication.framework.util.FrameworkConstants.InternalRoleDomains.APPLICATION_DOMAIN;
 import static org.wso2.carbon.identity.application.authentication.framework.util.FrameworkConstants.InternalRoleDomains.WORKFLOW_DOMAIN;
@@ -1323,6 +1324,47 @@ public class FrameworkUtils {
                                                 String loginTenantDomain, String orgId) {
 
         SessionContextCacheKey cacheKey = new SessionContextCacheKey(key);
+        SessionContextCacheEntry cacheEntry = buildSessionContextCacheEntry(key, sessionContext, tenantDomain, orgId);
+        SessionContextCache.getInstance().addToCache(cacheKey, cacheEntry, loginTenantDomain);
+    }
+
+    /**
+     * Adds the given session context to the session context cache only, without persisting it to the session data
+     * store.
+     *
+     * @param key               Session context cache key.
+     * @param sessionContext    Session context to be cached.
+     * @param applicationTenantDomain      Application tenant domain used to resolve session timeout configurations.
+     * @param tenantDomain      Tenant domain under which the cache entry is stored.
+     * @param orgId             Organization id used to look up authenticated sequences from
+     *                          {@link SessionContext#getAuthenticatedOrgData()}.
+     */
+    public static void addSessionContextToCacheWithoutPersisting(String key, SessionContext sessionContext,
+                                                                 String applicationTenantDomain, String tenantDomain,
+                                                                 String orgId) {
+
+        SessionContextCacheKey cacheKey = new SessionContextCacheKey(key);
+        SessionContextCacheEntry cacheEntry =
+                buildSessionContextCacheEntry(key, sessionContext, applicationTenantDomain, orgId);
+        SessionContextCache.getInstance().addToCacheWithoutPersisting(cacheKey, cacheEntry, tenantDomain);
+    }
+
+    /**
+     * Builds a {@link SessionContextCacheEntry} for the given session context. When an {@code orgId} is provided and
+     * the session context holds an {@link AuthenticatedOrgData} entry for that organization, the authenticated
+     * sequences of that organization are used for cleanup (clearing user attributes and the authentication graph).
+     * Otherwise, the top-level authenticated sequences of the session context are used.
+     *
+     * @param key            Session context cache key.
+     * @param sessionContext Session context to be cached.
+     * @param tenantDomain   Application tenant domain used to resolve session timeout configurations.
+     * @param orgId          Organization id used to look up authenticated sequences from
+     *                       {@link SessionContext#getAuthenticatedOrgData()}.
+     * @return The built session context cache entry.
+     */
+    private static SessionContextCacheEntry buildSessionContextCacheEntry(String key, SessionContext sessionContext,
+                                                                          String tenantDomain, String orgId) {
+
         SessionContextCacheEntry cacheEntry = new SessionContextCacheEntry();
         cacheEntry.setContextIdentifier(key);
 
@@ -1363,7 +1405,7 @@ public class FrameworkUtils {
 
         cacheEntry.setContext(sessionContext);
         cacheEntry.setValidityPeriod(timeoutPeriod);
-        SessionContextCache.getInstance().addToCache(cacheKey, cacheEntry, loginTenantDomain);
+        return cacheEntry;
     }
 
     /**
@@ -3726,6 +3768,16 @@ public class FrameworkUtils {
                     + " with id: " + serviceProvider.getApplicationID());
         }
         return isSkipConsent;
+    }
+
+    /**
+     * Check whether the Consent V2 API is enabled via the Consent.EnableV2API configuration property.
+     *
+     * @return true if enabled, false if explicitly disabled or not configured.
+     */
+    public static boolean isConsentV2APIEnabled() {
+
+        return Boolean.parseBoolean(IdentityUtil.getProperty(ENABLE_V2_API_PROPERTY));
     }
 
     /**

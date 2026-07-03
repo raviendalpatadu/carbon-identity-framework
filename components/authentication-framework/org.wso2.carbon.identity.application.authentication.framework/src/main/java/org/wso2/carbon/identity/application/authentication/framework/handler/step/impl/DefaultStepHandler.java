@@ -74,6 +74,7 @@ import org.wso2.carbon.identity.core.model.IdentityErrorMsgContext;
 import org.wso2.carbon.identity.core.util.IdentityCoreConstants;
 import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
 import org.wso2.carbon.identity.core.util.IdentityUtil;
+import org.wso2.carbon.identity.event.IdentityEventConstants;
 import org.wso2.carbon.identity.flow.mgt.Constants;
 import org.wso2.carbon.identity.flow.mgt.exception.FlowMgtServerException;
 import org.wso2.carbon.identity.flow.mgt.utils.FlowMgtConfigUtils;
@@ -153,6 +154,10 @@ public class DefaultStepHandler implements StepHandler {
         Optional<String> appName = FrameworkUtils.getApplicationName(context);
         appName.ifPresent(name ->
                 PrivilegedCarbonContext.getThreadLocalCarbonContext().setApplicationName(name));
+        Optional<String> appResourceId = FrameworkUtils.getApplicationResourceId(context);
+        appResourceId.ifPresent(resourceId ->
+                IdentityUtil.threadLocalProperties.get().put(
+                        IdentityEventConstants.EventProperty.SERVICE_PROVIDER_UUID, resourceId));
         List<AuthenticatorConfig> authConfigList = stepConfig.getAuthenticatorList();
 
         String authenticatorNames = FrameworkUtils.getAuthenticatorIdPMappingString(authConfigList);
@@ -1626,6 +1631,18 @@ public class DefaultStepHandler implements StepHandler {
 
         AuthenticatedUser authenticatedUser = authenticatedIdPData.getUser();
         Map<ClaimMapping, String> userAttributes = authenticatedUser.getUserAttributes();
+        // First check for org_id claim as it is the standard claim to be used for organization login.
+        for (Map.Entry<ClaimMapping, String> entry : userAttributes.entrySet()) {
+            ClaimMapping claimMapping = entry.getKey();
+            if (FrameworkConstants.ORG_ID_CLAIM.equals(claimMapping.getLocalClaim().getClaimUri())) {
+                String organizationId = entry.getValue();
+                if (StringUtils.isNotBlank(organizationId)) {
+                    request.setAttribute(FrameworkConstants.ORG_ID_PARAMETER, organizationId);
+                }
+                return;
+            }
+        }
+        // Check for user_organization claim as a fallback if org_id claim is not present.
         for (Map.Entry<ClaimMapping, String> entry : userAttributes.entrySet()) {
             ClaimMapping claimMapping = entry.getKey();
             if (FrameworkConstants.USER_ORGANIZATION_CLAIM.equals(claimMapping.getLocalClaim().getClaimUri())) {

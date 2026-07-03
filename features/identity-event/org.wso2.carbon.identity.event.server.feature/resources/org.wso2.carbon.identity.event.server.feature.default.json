@@ -84,6 +84,7 @@
   "identity_mgt.events.schemes.'suspension.notification'.properties.'account.disable.delay'": "90d",
   "identity_mgt.events.schemes.'suspension.notification'.properties.'trigger.time'": "20:00:00",
   "identity_mgt.events.schemes.'suspension.notification'.properties.delays": "30,45,60,75",
+  "identity_mgt.events.schemes.'suspension.notification'.properties.'date.format'": "dd-MM-yyyy",
   "identity_mgt.events.schemes.handleRequestObject.module_index": "11",
   "identity_mgt.events.schemes.handleRequestObject.subscriptions": [
     "POST_REVOKE_ACESS_TOKEN",
@@ -428,5 +429,72 @@
     "POST_UPDATE_ORGANIZATION",
     "POST_PATCH_ORGANIZATION",
     "PRE_DELETE_ORGANIZATION"
-   ]
+  ],
+  "identity_mgt.events.schemes.OrganizationAgentSharingHandler.module_index": "64",
+  "identity_mgt.events.schemes.OrganizationAgentSharingHandler.subscriptions": [
+    "POST_ADD_ORGANIZATION",
+    "POST_DELETE_ORGANIZATION"
+  ],
+  "identity_mgt.events.schemes.moesifUserAuthenticationPublisher.module_index": "65",
+  "identity_mgt.events.schemes.moesifUserAuthenticationPublisher.properties.enable": false,
+  "identity_mgt.events.schemes.moesifUserAuthenticationPublisher.subscriptions": [
+    "AUTHENTICATION_SUCCESS",
+    "AUTHENTICATION_STEP_FAILURE",
+    "AUTHENTICATION_STEP_SUCCESS"
+  ],
+  "identity_mgt.events.schemes.moesifFlowPublisher.module_index": "66",
+  "identity_mgt.events.schemes.moesifFlowPublisher.properties.enable": false,
+  "identity_mgt.events.schemes.moesifFlowPublisher.subscriptions": [
+    "POST_FLOW_EXECUTION_STEP_EVENT"
+  ],
+  "identity_mgt.events.schemes.moesifUserRegistrationPublisher.module_index": "67",
+  "identity_mgt.events.schemes.moesifUserRegistrationPublisher.properties.enable": false,
+  "identity_mgt.events.schemes.moesifUserRegistrationPublisher.subscriptions": [
+    "POST_ADD_USER"
+  ],
+  "identity_mgt.events.schemes.moesifOrgSwitchPublisher.module_index": "68",
+  "identity_mgt.events.schemes.moesifOrgSwitchPublisher.properties.enable": false,
+  "identity_mgt.events.schemes.moesifOrgSwitchPublisher.subscriptions": [
+    "POST_ORGANIZATION_SWITCH_EVENT"
+  ],
+  "identity_mgt.events.schemes.moesifUserSessionPublisher.module_index": "69",
+  "identity_mgt.events.schemes.moesifUserSessionPublisher.properties.enable": false,
+  "identity_mgt.events.schemes.moesifUserSessionPublisher.subscriptions": [
+    "SESSION_CREATE", "SESSION_TERMINATE", "SESSION_UPDATE"
+  ],
+  "identity_mgt.events.schemes.moesifOAuthTokenIssuancePublisher.module_index": "70",
+  "identity_mgt.events.schemes.moesifOAuthTokenIssuancePublisher.properties.enable": false,
+  "identity_mgt.events.schemes.moesifOAuthTokenIssuancePublisher.subscriptions": [
+    "POST_ISSUE_ACCESS_TOKEN_V2"
+  ],
+  "identity_mgt.events.schemes.authorizedScopesCacheInvalidationHandler.module_index": "71",
+  "identity_mgt.events.schemes.authorizedScopesCacheInvalidationHandler.subscriptions": [
+    "POST_DELETE_API_RESOURCE",
+    "POST_DELETE_API_RESOURCE_SCOPES",
+    "POST_DELETE_SCOPE",
+    "POST_PUT_API_RESOURCE_SCOPES",
+    "POST_UPDATE_API_RESOURCE"
+  ],
+  "identity_mgt.events.schemes.ConsentEventHook.module_index": "72",
+  "identity_mgt.events.schemes.ConsentEventHook.properties.enable": true,
+  "identity_mgt.events.schemes.ConsentEventHook.subscriptions": [
+    "POST_ADD_RECEIPT",
+    "POST_AUTHORIZE_CONSENT"
+  ],
+  "identity_mgt.events.schemes.ConsentPurposeEventHook.module_index": "73",
+  "identity_mgt.events.schemes.ConsentPurposeEventHook.properties.enable": true,
+  "identity_mgt.events.schemes.ConsentPurposeEventHook.subscriptions": [
+    "POST_ADD_PURPOSE_VERSION"
+  ],
+  "identity_mgt.events.schemes.RoleManagementEventHook.module_index": "74",
+  "identity_mgt.events.schemes.RoleManagementEventHook.properties.enable": true,
+  "identity_mgt.events.schemes.RoleManagementEventHook.subscriptions": [
+    "POST_ADD_ROLE_V2_EVENT",
+    "POST_UPDATE_ROLE_V2_NAME_EVENT",
+    "POST_DELETE_ROLE_V2_EVENT",
+    "POST_UPDATE_USER_LIST_OF_ROLE_V2_EVENT",
+    "POST_UPDATE_GROUP_LIST_OF_ROLE_V2_EVENT",
+    "POST_UPDATE_IDP_GROUP_LIST_OF_ROLE_V2_EVENT",
+    "POST_UPDATE_PERMISSIONS_FOR_ROLE_V2_EVENT"
+  ]
 }

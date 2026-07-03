@@ -43,6 +43,7 @@ import org.wso2.carbon.identity.flow.mgt.model.GraphConfig;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.wso2.carbon.identity.flow.execution.engine.Constants.ANONYMOUS_PROFILE_TRACKER;
 import static org.wso2.carbon.identity.flow.execution.engine.Constants.OTFI;
 import static org.wso2.carbon.identity.flow.execution.engine.Constants.STATUS_COMPLETE;
 import static org.wso2.carbon.identity.flow.mgt.Constants.FlowTypes.REGISTRATION;
@@ -93,8 +94,9 @@ public class FlowExecutionService {
         FlowExecutionContext context = null;
         boolean isFlowEnteredInIdentityContext = false;
         GraphConfig graphConfig = null;
+        boolean isInitiation = StringUtils.isBlank(flowId);
         try {
-            if (StringUtils.isBlank(flowId)) {
+            if (isInitiation) {
                 // No flowId present hence initiate the flow.
                 context = FlowExecutionEngineUtils.initiateContext(tenantDomain, applicationId, flowType);
             } else {
@@ -120,6 +122,15 @@ public class FlowExecutionService {
                 context.getUserInputData().putAll(inputs);
             }
 
+            // On the initial request of the registration flow, move the anonymous_profile_tracker value (if
+            // provided) from the user inputs into the flow context properties so that it is retained throughout
+            // the flow and not treated as a user input during the subsequent input validations.
+            if (isInitiation && REGISTRATION.getType().equals(context.getFlowType())
+                    && context.getUserInputData().containsKey(ANONYMOUS_PROFILE_TRACKER)) {
+                context.setProperty(ANONYMOUS_PROFILE_TRACKER,
+                        context.getUserInputData().remove(ANONYMOUS_PROFILE_TRACKER));
+            }
+
             context.setCurrentActionId(actionId);
             for (FlowExecutionListener listener :
                     FlowExecutionEngineDataHolder.getInstance().getFlowListeners()) {
@@ -134,6 +145,7 @@ public class FlowExecutionService {
                     return null;
                 }
             }
+            FlowExecutionEngineUtils.publishFlowExecutionSuccessEvent(context, step);
             if (STATUS_COMPLETE.equals(step.getFlowStatus())) {
                 FlowExecutionEngineUtils.removeFlowContextFromCache(flowId);
                 if (step.getData() == null) {
@@ -152,6 +164,7 @@ public class FlowExecutionService {
             return step;
         } catch (FlowEngineException e) {
 
+            FlowExecutionEngineUtils.publishFlowExecutionFailureEvent(context, e.getErrorCode());
             if (context != null && REGISTRATION.getType().equals(context.getFlowType())) {
                 Map<String, String> userClaims =
                         context.getFlowUser() != null ? context.getFlowUser().getClaims() : null;

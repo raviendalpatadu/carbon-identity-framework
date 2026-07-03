@@ -224,6 +224,8 @@
         <Scopes>
             <Scope displayName="Update Branding Preference" name="internal_branding_preference_update"
                    description="Update branding preferences of the organization (root)"/>
+            <Scope displayName="Update Branding Policy URLs" name="internal_branding_preference_policy_update"
+                   description="Update policy URLs in branding preferences of the organization (root)"/>
         </Scopes>
     </APIResource>
     <APIResource name="Branding Preference Management API"
@@ -233,6 +235,8 @@
         <Scopes>
             <Scope displayName="Update Branding Preference" name="internal_org_branding_preference_update"
                    description="Update branding preferences on user interfaces of the organization"/>
+            <Scope displayName="Update Branding Policy URLs" name="internal_org_branding_preference_policy_update"
+                   description="Update policy URLs in branding preferences of the organization"/>
         </Scopes>
     </APIResource>
     <APIResource name="Claim Management API" identifier="/api/server/v1/claim-dialects"
@@ -655,6 +659,20 @@
                    description="Update the configurations of secondary userstores in the organization"/>
         </Scopes>
     </APIResource>
+    <APIResource name="Moesif Configurations Management API" identifier="/api/server/v1/moesif-publishers"
+                 requiresAuthorization="true"
+                 description="API representation of the Moesif Configurations Management API" type="TENANT">
+        <Scopes>
+            <Scope displayName="View Moesif Configurations" name="internal_moesif_config_view"
+                   description="View moesif configurations"/>
+            <Scope displayName="Create Moesif Configurations" name="internal_moesif_config_create"
+                   description="Create new moesif configurations"/>
+            <Scope displayName="Update Moesif Configurations" name="internal_moesif_config_update"
+                   description="Update moesif configurations"/>
+            <Scope displayName="Delete Moesif Configurations" name="internal_moesif_config_delete"
+                   description="Delete moesif configurations"/>
+        </Scopes>
+    </APIResource>
     <APIResource name="Association Management API"
                  identifier="/api/users/v1/(.*)/(.*)associations" requiresAuthorization="true"
                  description="API representation of the Association Management API" type="TENANT">
@@ -966,6 +984,114 @@
                     description="Add new consent in the organization (root)"/>
             <Scope displayName="Delete Consent" name="internal_consent_mgt_delete" 
                     description="Delete consent in the organization (root)"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Consent Management V2 Elements API" identifier="/api/identity/consent-mgt/v2.0/elements"
+                 requiresAuthorization="true"
+                 description="API representation of the Consent Management V2 Elements API" type="TENANT">
+        <Scopes>
+            <Scope displayName="View Consent Element" name="internal_consent_mgt_element_view"
+                   description="View Consent Elements"/>
+            <Scope displayName="Create Consent Element" name="internal_consent_mgt_element_create"
+                   description="Create new Consent Element"/>
+            <Scope displayName="Delete Consent Element" name="internal_consent_mgt_element_delete"
+                   description="Delete Consent Element"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Consent Management V2 Purposes API" identifier="/api/identity/consent-mgt/v2.0/purposes"
+                 requiresAuthorization="true"
+                 description="API representation of the Consent Management V2 Purposes API" type="TENANT">
+        <Scopes>
+            <Scope displayName="View Consent Purpose" name="internal_consent_mgt_purpose_view"
+                   description="View Consent Purposes"/>
+            <Scope displayName="Create Consent Purpose" name="internal_consent_mgt_purpose_create"
+                   description="Create new Consent Purpose"/>
+            <Scope displayName="Update Consent Purpose" name="internal_consent_mgt_purpose_update"
+                   description="Update Consent Purpose"/>
+            <Scope displayName="Delete Consent Purpose" name="internal_consent_mgt_purpose_delete"
+                   description="Delete Consent Purpose"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Consent Management V2 Consents API" identifier="/api/identity/consent-mgt/v2.0/consents"
+                 requiresAuthorization="true"
+                 description="API representation of the Consent Management V2 Consents API" type="TENANT">
+        <Scopes>
+            <Scope displayName="View Consent" name="internal_consent_mgt_consent_view"
+                   description="View Consents"/>
+            <Scope displayName="Create Consent" name="internal_consent_mgt_consent_create"
+                   description="Create new Consent"/>
+            <Scope displayName="Update Consent" name="internal_consent_mgt_consent_update"
+                   description="Update Consent"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Consent Management V2 Elements API" identifier="/o/api/identity/consent-mgt/v2.0/elements"
+                 requiresAuthorization="true"
+                 description="API representation of the Consent Management V2 Elements API for organizations" type="ORGANIZATION">
+        <Scopes>
+            <Scope displayName="View Consent Element" name="internal_org_consent_mgt_element_view"
+                   description="View Consent Elements in the organization"/>
+            <Scope displayName="Create Consent Element" name="internal_org_consent_mgt_element_create"
+                   description="Create new Consent Element in the organization"/>
+            <Scope displayName="Delete Consent Element" name="internal_org_consent_mgt_element_delete"
+                   description="Delete Consent Element in the organization"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Consent Management V2 Purposes API" identifier="/o/api/identity/consent-mgt/v2.0/purposes"
+                 requiresAuthorization="true"
+                 description="API representation of the Consent Management V2 Purposes API for organizations" type="ORGANIZATION">
+        <Scopes>
+            <Scope displayName="View Consent Purpose" name="internal_org_consent_mgt_purpose_view"
+                   description="View Consent Purposes in the organization"/>
+            <Scope displayName="Create Consent Purpose" name="internal_org_consent_mgt_purpose_create"
+                   description="Create new Consent Purpose in the organization"/>
+            <Scope displayName="Update Consent Purpose" name="internal_org_consent_mgt_purpose_update"
+                   description="Update Consent Purpose in the organization"/>
+            <Scope displayName="Delete Consent Purpose" name="internal_org_consent_mgt_purpose_delete"
+                   description="Delete Consent Purpose in the organization"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Consent Management V2 Consents API" identifier="/o/api/identity/consent-mgt/v2.0/consents"
+                 requiresAuthorization="true"
+                 description="API representation of the Consent Management V2 Consents API for organizations" type="ORGANIZATION">
+        <Scopes>
+            <Scope displayName="View Consent" name="internal_org_consent_mgt_consent_view"
+                   description="View Consents in the organization"/>
+            <Scope displayName="Create Consent" name="internal_org_consent_mgt_consent_create"
+                   description="Create new Consent in the organization"/>
+            <Scope displayName="Update Consent" name="internal_org_consent_mgt_consent_update"
+                   description="Update Consent in the organization"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Consent Purpose Application Mapping API"
+                 identifier="/api/server/v1/configs/consent/purposes"
+                 requiresAuthorization="true"
+                 description="API representation of the Consent Purpose Application Mapping API" type="TENANT">
+        <Scopes>
+            <Scope displayName="View Consent Purpose Application Mapping"
+                   name="internal_consent_mgt_purpose_app_view"
+                   description="View Consent Purpose Application Mappings"/>
+            <Scope displayName="Add Application to Consent Purpose"
+                   name="internal_consent_mgt_purpose_app_create"
+                   description="Add Application to Consent Purpose"/>
+            <Scope displayName="Remove Application from Consent Purpose"
+                   name="internal_consent_mgt_purpose_app_delete"
+                   description="Remove Application from Consent Purpose"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Consent Purpose Application Mapping API"
+                 identifier="/o/api/server/v1/configs/consent/purposes"
+                 requiresAuthorization="true"
+                 description="API representation of the Consent Purpose Application Mapping API for organizations" type="ORGANIZATION">
+        <Scopes>
+            <Scope displayName="View Consent Purpose Application Mapping"
+                   name="internal_org_consent_mgt_purpose_app_view"
+                   description="View Consent Purpose Application Mappings in the organization"/>
+            <Scope displayName="Add Application to Consent Purpose"
+                   name="internal_org_consent_mgt_purpose_app_create"
+                   description="Add Application to Consent Purpose in the organization"/>
+            <Scope displayName="Remove Application from Consent Purpose"
+                   name="internal_org_consent_mgt_purpose_app_delete"
+                   description="Remove Application from Consent Purpose in the organization"/>
         </Scopes>
     </APIResource>
     <APIResource name="Identity Recovery API" identifier="/api/identity/recovery"
@@ -2021,6 +2147,32 @@
                    description="Manage edits of tenants from the Console"/>
         </Scopes>
     </APIResource>
+    <APIResource name="Consent Management Feature" identifier="console:consents"
+                 requiresAuthorization="true"
+                 description="Resource representation of the Consent Management Feature"
+                 type="CONSOLE_FEATURE">
+        <Scopes>
+            <Scope displayName="Consent Management Feature" name="console:consents"
+                   description="Manage consent from the Console"/>
+            <Scope displayName="Consent Management View Feature" name="console:consents_view"
+                   description="Manage views of consent from the Console"/>
+            <Scope displayName="Consent Management Edit Feature" name="console:consents_edit"
+                   description="Manage edits of consent from the Console"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Consent Management Feature" identifier="console:org:consents"
+                 requiresAuthorization="true"
+                 description="Resource representation of the Consent Management Feature for organizations"
+                 type="CONSOLE_ORG_FEATURE">
+        <Scopes>
+            <Scope displayName="Consent Management Feature" name="console:org:consents"
+                   description="Manage consent in the organization from the Console"/>
+            <Scope displayName="Consent Management View Feature" name="console:org:consents_view"
+                   description="Manage views of consent in the organization from the Console"/>
+            <Scope displayName="Consent Management Edit Feature" name="console:org:consents_edit"
+                   description="Manage edits of consent in the organization from the Console"/>
+        </Scopes>
+    </APIResource>
     <APIResource name="Flows Feature" identifier="console:flows"
                  requiresAuthorization="true"
                  description="Resource representation of the Flows Feature"
@@ -2045,6 +2197,32 @@
                    description="Manage views of flows from the Console"/>
             <Scope displayName="Flows Edit Feature" name="console:org:flows_edit"
                    description="Manage edits of flows from the Console"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Flow Extensions Feature" identifier="console:flowExtensions"
+                 requiresAuthorization="true"
+                 description="Resource representation of the Flow Extensions Feature"
+                 type="CONSOLE_FEATURE">
+        <Scopes>
+            <Scope displayName="Flow Extensions Feature" name="console:flowExtensions"
+                   description="Manage flow extensions from the Console"/>
+            <Scope displayName="Flow Extensions View Feature" name="console:flowExtensions_view"
+                   description="Manage views of flow extensions from the Console"/>
+            <Scope displayName="Flow Extensions Edit Feature" name="console:flowExtensions_edit"
+                   description="Manage edits of flow extensions from the Console"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Flow Extensions Feature" identifier="console:org:flowExtensions"
+                 requiresAuthorization="true"
+                 description="Resource representation of the Flow Extensions Feature"
+                 type="CONSOLE_ORG_FEATURE">
+        <Scopes>
+            <Scope displayName="Flow Extensions Feature" name="console:org:flowExtensions"
+                   description="Manage flow extensions from the Console"/>
+            <Scope displayName="Flow Extensions View Feature" name="console:org:flowExtensions_view"
+                   description="Manage views of flow extensions from the Console"/>
+            <Scope displayName="Flow Extensions Edit Feature" name="console:org:flowExtensions_edit"
+                   description="Manage edits of flow extensions from the Console"/>
         </Scopes>
     </APIResource>
     <APIResource name="Offline User Onboard API" identifier="/o/api/users/v1/offline-invite-link/"
@@ -2123,6 +2301,34 @@
                    description="Update flow in the organization"/>
             <Scope displayName="Delete Flow" name="internal_org_flow_delete"
                    description="Delete flow in the organization"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Flow Extension Management API" identifier="/api/server/v1/flow/extension"
+                 requiresAuthorization="true"
+                 description="API representation of the Flow Extension Management API" type="TENANT">
+        <Scopes>
+            <Scope displayName="View Flow Extension" name="internal_flow_extension_view"
+                   description="View flow extension in the organization (root)"/>
+            <Scope displayName="Create Flow Extension" name="internal_flow_extension_create"
+                   description="Create flow extension in the organization (root)"/>
+            <Scope displayName="Update Flow Extension" name="internal_flow_extension_update"
+                   description="Update flow extension in the organization (root)"/>
+            <Scope displayName="Delete Flow Extension" name="internal_flow_extension_delete"
+                   description="Delete flow extension in the organization (root)"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="Flow Extension Management API" identifier="/o/api/server/v1/flow/extension"
+                 requiresAuthorization="true"
+                 description="API representation of the Flow Extension Management API" type="ORGANIZATION">
+        <Scopes>
+            <Scope displayName="View Flow Extension" name="internal_org_flow_extension_view"
+                   description="View flow extension in the organization"/>
+            <Scope displayName="Create Flow Extension" name="internal_org_flow_extension_create"
+                   description="Create flow extension in the organization"/>
+            <Scope displayName="Update Flow Extension" name="internal_org_flow_extension_update"
+                   description="Update flow extension in the organization"/>
+            <Scope displayName="Delete Flow Extension" name="internal_org_flow_extension_delete"
+                   description="Delete flow extension in the organization"/>
         </Scopes>
     </APIResource>
     <APIResource name="Asynchronous Operation Status API" identifier="/api/server/v1/async-operations"
@@ -2237,6 +2443,30 @@
         <Scopes>
             <Scope displayName="View Credential" name="internal_org_user_credential_mgt_view"
                    description="View credentials of end users in the organization"/>
+            <Scope displayName="Delete Credential" name="internal_org_user_credential_mgt_delete"
+                   description="Delete credentials of end users in the organization"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="User Credential Management API v2" identifier="/api/users/v2/(.*)/credentials"
+                 requiresAuthorization="true"
+                 description="API representation of the User Credential Management API v2" type="TENANT">
+        <Scopes>
+            <Scope displayName="View Credential" name="internal_user_credential_mgt_view"
+                   description="View credentials of end users in the organization"/>
+            <Scope displayName="Create Credential" name="internal_user_credential_mgt_create"
+                   description="Create credentials for end users in the organization"/>
+            <Scope displayName="Delete Credential" name="internal_user_credential_mgt_delete"
+                   description="Delete credentials of end users in the organization"/>
+        </Scopes>
+    </APIResource>
+    <APIResource name="User Credential Management API v2" identifier="/o/api/users/v2/(.*)/credentials"
+                 requiresAuthorization="true"
+                 description="API representation of the User Credential Management API v2" type="ORGANIZATION">
+        <Scopes>
+            <Scope displayName="View Credential" name="internal_org_user_credential_mgt_view"
+                   description="View credentials of end users in the organization"/>
+            <Scope displayName="Create Credential" name="internal_org_user_credential_mgt_create"
+                   description="Create credentials for end users in the organization"/>
             <Scope displayName="Delete Credential" name="internal_org_user_credential_mgt_delete"
                    description="Delete credentials of end users in the organization"/>
         </Scopes>

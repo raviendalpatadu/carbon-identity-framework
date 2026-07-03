@@ -80,6 +80,7 @@ public class ApplicationConstants {
             .separator;
     public static final String PURPOSE_GROUP_TYPE_SP = "SP";
     public static final String PURPOSE_GROUP_TYPE_SYSTEM = "SYSTEM";
+    public static final String PURPOSE_GROUP_TYPE_POLICY = "Policy";
     public static final String PURPOSE_GROUP_SHARED = "SHARED";
     public static final String IS_FRAGMENT_APP = "isFragmentApp";
     public static final String IS_AGENT_APP = "isAgentApplication";
@@ -148,6 +149,7 @@ public class ApplicationConstants {
     public static final String MYACCOUNT_PORTAL_PATH = "MyAccount.AppBaseName";
     public static final String AUTHORIZE_ALL_SCOPES = "OAuth.AuthorizeAllScopes";
     public static final String AUTHORIZE_INTERNAL_SCOPES = "OAuth.AuthorizeInternalScopes";
+    public static final String MERGE_AUTHORIZED_SCOPES_BY_POLICY = "OAuth.MergeAuthorizedScopesByPolicy";
     public static final String RBAC = "RBAC";
     public static final String SYSTEM_PORTALS = "SystemPortals";
     public static final String IMPERSONATE_SCOPE_NAME = "internal_user_impersonate";

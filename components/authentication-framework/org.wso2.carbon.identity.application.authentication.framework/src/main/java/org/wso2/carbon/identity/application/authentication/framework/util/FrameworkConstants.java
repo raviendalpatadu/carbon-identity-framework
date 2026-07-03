@@ -42,6 +42,7 @@ public abstract class FrameworkConstants {
     public static final String ACCOUNT_LOCKED_CLAIM_URI = "http://wso2.org/claims/identity/accountLocked";
     public static final String ACCOUNT_DISABLED_CLAIM_URI = "http://wso2.org/claims/identity/accountDisabled";
     public static final String ACCOUNT_STATE_CLAIM_URI = "http://wso2.org/claims/identity/accountState";
+    public static final String ACCOUNT_LOCKED_REASON_CLAIM_URI = "http://wso2.org/claims/identity/lockedReason";
     public static final String ACCOUNT_UNLOCK_TIME_CLAIM = "http://wso2.org/claims/identity/unlockTime";
     public static final String USERNAME_CLAIM = "http://wso2.org/claims/username";
     public static final String USER_ID_CLAIM = "http://wso2.org/claims/userid";
@@ -301,6 +302,8 @@ public abstract class FrameworkConstants {
 
     public static final String AMR = "amr";
     public static final String USER_ASSERTION = "userAssertion";
+
+    public static final String RETURN_ROLES_IN_SAAS_APPS_IN_ID_TOKEN = "ReturnRolesInSaaSAppsInIDToken";
 
     // Authentication entity constants.
     public static final String AUTH_ENTITY = "auth_entity";
@@ -722,6 +725,7 @@ public abstract class FrameworkConstants {
         public static final String PII_CATEGORY = "piiCategory";
         public static final String EXPLICIT_CONSENT_TYPE = "EXPLICIT";
         public static final String INFINITE_TERMINATION = "DATE_UNTIL:INDEFINITE";
+        public static final String ENABLE_V2_API_PROPERTY = "Consent.EnableV2API";
     }
 
     /**
@@ -857,6 +861,7 @@ public abstract class FrameworkConstants {
             public static final String AUTHENTICATION_STEP_EXECUTION = "authentication-step-execution";
             public static final String EXECUTE_ADAPTIVE_SCRIPT = "execute-adaptive-script";
             public static final String JIT_PROVISIONING = "jit-provisioning";
+            public static final String PROCESS_POLICY_CONSENT = "process-policy-consent";
         }
     }
 

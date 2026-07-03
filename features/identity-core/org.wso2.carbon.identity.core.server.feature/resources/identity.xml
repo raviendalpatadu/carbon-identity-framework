@@ -197,6 +197,10 @@
     </ClientAttestation>
 
     <OAuth>
+        <GracefulRefreshTokenRotation>
+            <ValidityPeriodMax>60</ValidityPeriodMax>
+            <ReuseLimitMax>5</ReuseLimitMax>
+        </GracefulRefreshTokenRotation>
         <!-- Token cleanup feature config to clean IDN_OAUTH2_ACCESS_TOKEN table-->
         <TokenCleanup>
             <!--If true old access token cleaning feature is enabled -->
@@ -900,6 +904,8 @@
         <EnableSSOConsentManagement>true</EnableSSOConsentManagement>
         <!--Specify whether consent should be prompted for subject claim uri if configured as a requested claim.-->
         <PromptSubjectClaimRequestedConsent>true</PromptSubjectClaimRequestedConsent>
+        <!--Specify whether consent versioning along with the V2 API and related functionalities should be enabled.-->
+        <EnableV2API>true</EnableV2API>
     </Consent>
 
     <SecurityTokenService>
@@ -1536,6 +1542,10 @@
                        type="org.wso2.carbon.identity.application.mgt.listener.ApplicationMgtListener"
                        name="org.wso2.carbon.identity.organization.management.application.listener.FragmentApplicationMgtListener"
                        orderId="50" enable="true"/>
+        <EventListener id="sub_org_application_mgt_listener"
+                       type="org.wso2.carbon.identity.application.mgt.listener.ApplicationMgtListener"
+                       name="org.wso2.carbon.identity.organization.management.application.listener.SubOrgApplicationMgtListener"
+                       orderId="375" enable="true"/>
         <EventListener id="organization_user_operation_listener"
                        type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
                        name="org.wso2.carbon.identity.organization.management.role.management.service.listener.OrganizationUserOperationEventListener"
@@ -1548,6 +1558,11 @@
                        type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
                        name="org.wso2.carbon.identity.organization.management.organization.user.sharing.listener.SharedUserOperationEventListener"
                        orderId="128" enable="true"/>
+        <EventListener id="organization_agent_association_listener"
+                       type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
+                       name="org.wso2.carbon.identity.organization.management.organization.agent.sharing.listener.SharedAgentOperationEventListener"
+                       orderId="130"
+                       enable="true"/>
         <EventListener id="shared_user_profile_update_governance_listener"
                        type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
                        name="org.wso2.carbon.identity.organization.management.organization.user.sharing.listener.SharedUserProfileUpdateGovernanceEventListener"
@@ -3034,6 +3049,7 @@
     </NotificationChannel>
     <PASTRCookieMaxAge>-1</PASTRCookieMaxAge>
     <MarkStepCompletedOnInterrupt>true</MarkStepCompletedOnInterrupt>
+    <ReturnRolesInSaaSAppsInIDToken>false</ReturnRolesInSaaSAppsInIDToken>
 
     <TenantLevelAuthenticationConfigForAuthSequence>true</TenantLevelAuthenticationConfigForAuthSequence>
     <EnhancedOrganizationAuthenticationFeatureEnabled>true</EnhancedOrganizationAuthenticationFeatureEnabled>
@@ -3047,4 +3063,30 @@
     </AppNativeAuthentication>
     <!-- Config to allow legacy SCIM enterprise user behaviors -->
     <EnableSCIMLegacyEnterpriseUser>false</EnableSCIMLegacyEnterpriseUser>
+
+    <Analytics>
+        <Moesif>
+            <ProviderURL>https://api.moesif.net/v1</ProviderURL>
+            <AuthType>API_KEY</AuthType>
+            <ApiKeyHeader>X-Moesif-Application-Id</ApiKeyHeader>
+            <StreamName>org.wso2.is.analytics.stream.MoesifData</StreamName>
+            <StreamVersion>1.0.0</StreamVersion>
+            <InlineBody></InlineBody>
+            <Enabled>false</Enabled>
+            <AlwaysPublish>false</AlwaysPublish>
+        </Moesif>
+    </Analytics>
+
+    <!-- Circuit Breaker configuration -->
+    <CircuitBreaker>
+        <Enabled>true</Enabled>
+        <TenantServiceCacheCapacity>5000</TenantServiceCacheCapacity>
+        <TenantServiceEvictionThreshold>0.75</TenantServiceEvictionThreshold>
+        <TenantServiceEntryIdleTimeout>600000</TenantServiceEntryIdleTimeout> <!-- value in milliseconds -->
+        <WindowSize>30</WindowSize>
+        <MinCallsToEvaluate>15</MinCallsToEvaluate>
+        <FailureRateThreshold>0.5</FailureRateThreshold>
+        <OpenDuration>60000</OpenDuration> <!-- value in milliseconds -->
+        <MaxInFlight>20</MaxInFlight>
+    </CircuitBreaker>
 </Server>
